@@ -1,0 +1,26 @@
+{
+    "name": "YaronMiro/wp-cli-profile-installer",
+    "description": "wp-cli profile command for managing Plugins and Themes from a YML config file.",
+    "homepage": "https://github.com/YaronMiro/wp-cli-profile-installer",
+    "keywords": [ "wp-cli", "wordpress", "wordpress plugin", "wordpress theme" ],
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "Yaron Miro",
+        "homepage": "https://github.com/YaronMiro",
+        "email": "yaron.miro@gmail.com"
+      }
+    ],
+    "autoload": {
+        "files": [ "class-wp-cli-profile-installer.php" ]
+    },
+    "require": {
+      "php": ">=5.4",
+        "symfony/yaml": "3.1.3"
+    },
+    "extras": {
+        "commands": [
+            "doc"
+        ]
+    }
+}
