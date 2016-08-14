@@ -5,6 +5,8 @@ WP-CLI Command for installing a WordPress site from a profile.
 
 [![Build Status](https://travis-ci.org/YaronMiro/wp-cli-profile-installer.svg?branch=master)](https://travis-ci.org/YaronMiro/wp-cli-profile-installer)
 
+## This is still a WIP and not ready for production yet!.
+
 Quick links: [Using](#using) | [Installing](#installing) | [Contributing](#contributing)
 
 ## Using
