@@ -1,26 +1,32 @@
 {
-    "name": "YaronMiro/wp-cli-profile-installer",
-    "description": "wp-cli profile command for managing Plugins and Themes from a YML config file.",
-    "homepage": "https://github.com/YaronMiro/wp-cli-profile-installer",
-    "keywords": [ "wp-cli", "wordpress", "wordpress plugin", "wordpress theme" ],
-    "license": "MIT",
-    "authors": [
-      {
-        "name": "Yaron Miro",
-        "homepage": "https://github.com/YaronMiro",
-        "email": "yaron.miro@gmail.com"
-      }
-    ],
-    "autoload": {
-        "files": [ "class-wp-cli-profile-installer.php" ]
-    },
-    "require": {
-      "php": ">=5.4",
-        "symfony/yaml": "3.1.3"
-    },
-    "extras": {
-        "commands": [
-            "doc"
-        ]
+  "name": "YaronMiro/wp-cli-profile-installer",
+  "description": "WP-CLI Command for installing a WordPress site from a profile.",
+  "homepage": "https://github.com/YaronMiro/wp-cli-profile-installer",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Yaron Miro",
+      "homepage": "https://github.com/YaronMiro",
+      "email": "yaron.miro@gmail.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "files": [ "command.php" ]
+  },
+  "require": {
+    "php": ">=5.3.9",
+    "symfony/yaml": "2.8.9"
+  },
+  "require-dev": {
+    "behat/behat": "~2.5"
+  },
+  "extras": {
+  "commands": [
+    "profile-installer db",
+    "profile-installer site",
+    "profile-installer plugins",
+    "profile-installer themes"
+    ]
+  }
 }
