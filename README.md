@@ -3,7 +3,7 @@ YaronMiro/wp-cli-profile-install
 
 WP-CLI Command for installing a WordPress site from a profile via Yaml config files.
 
-[![Build Status](https://travis-ci.org/YaronMiro/wp-cli-profile-install.svg?branch=master)](https://travis-ci.org/YaronMiro/wp-cli-profile-install)
+[![Build Status](https://travis-ci.org/YaronMiro/wp-cli-profile-installer.svg?branch=master)](https://travis-ci.org/YaronMiro/wp-cli-profile-install)
 
 ## This is still a WIP and not ready for production yet!.
 
