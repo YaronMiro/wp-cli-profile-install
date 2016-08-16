@@ -1,7 +1,7 @@
 {
-  "name": "YaronMiro/wp-cli-profile-installer",
-  "description": "WP-CLI Command for installing a WordPress site from a profile.",
-  "homepage": "https://github.com/YaronMiro/wp-cli-profile-installer",
+  "name": "YaronMiro/wp-cli-profile-install",
+  "description": "WP-CLI Command for installing a WordPress site from a profile via Yaml config files.",
+  "homepage": "https://github.com/YaronMiro/wp-cli-profile-install",
   "license": "MIT",
   "authors": [
     {
@@ -23,10 +23,10 @@
   },
   "extras": {
   "commands": [
-    "profile-installer db",
-    "profile-installer site",
-    "profile-installer plugins",
-    "profile-installer themes"
+    "profile-install db",
+    "profile-install site",
+    "profile-install plugins",
+    "profile-install themes"
     ]
   }
 }

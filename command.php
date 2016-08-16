@@ -1,6 +1,6 @@
 <?php
 
-namespace WP_CLI_Profile;
+namespace YM\Profile;
 
 if ( ! class_exists( 'WP_CLI' ) ) {
 	return;
@@ -10,49 +10,26 @@ if ( ! class_exists( 'WP_CLI' ) ) {
 use Symfony\Component\Yaml\Parser;
 
 /**
- * Perform install operations of a WordPress site straight from a profile.
  *
- * ## EXAMPLES
- *
- *     # Create a fresh database
- *     $ wp profile-installer db
- *     Success: Database created.
- *
- *     # Download WordPress core & Install WordPress.
- *     $ wp profile-installer create-site
- *     Success: WordPress downloaded.
- *     Success: WordPress installed successfully.
- *
- *     # Install the plugins
- *     $ wp profile-installer plugins
- *     Success: Plugins installed successfully.
- * 
- *     # Install the themes
- *     $ wp profile-installer themes
- *     Success: Themes installed successfully.
+ * Base class for all the profile install sub commands.
  *
  */
-class Installer extends \WP_CLI_Command {
+abstract class Installer extends \WP_CLI_Command {
 
   /**
-   * @var string $file_path expected file path.
+   * @var string $file_path the config file path.
    */
-  protected $file_path = '';
+  private $file_path = '';
+
+  /**
+   * @var array $allowed_file_types config file types.
+   */
+  private $allowed_file_types = array( 'yml', 'yaml' );
 
   /**
    * @var string $data_type the data type.
    */
   protected $data_type = '';
-
-  /**
-   * @var array[string] $allowed_data_types the allowed data types.
-   *  e.g. plugins | themes.
-   */
-  protected $allowed_data_types = array(
-    'site',
-    'plugins',
-    'themes',
-  );
 
   /**
    * @var array $data the data from the file.
@@ -62,97 +39,173 @@ class Installer extends \WP_CLI_Command {
   /**
    * @var object $data_parser the data parser object.
    */
-  protected $data_parser = null;
+  private $data_parser = null;
 
   /**
-   * Load the file data parser.
+   * Install a profile component via a unique command.
    *
-   * The commands have a dependency upon a file data parser.
-   * The file data parser must be loaded prior to any command execution.
+   * Each sub-command process is unique. Therefore it is an abstract method that
+   * must be implemented for each when sub-command extends this class.
+   *
+   */
+  public abstract function execute_command();
+
+  /**
+   * Validate dependencies have been installed and loaded.
+   *
+   * The commands may have a dependency upon a other sources.
+   * The sources must be installed and loaded prior to any command execution.
    */
   public function __construct() {
-    $this->load_the_data_parser();
+    $this->validate_dependencies_installation();
+    $this->load_dependencies();
   }
 
   /**
-   * Load the file data parser.
-   *
-   * If the data parser isn't loaded then exits the script with an error message.
+   * Basic mandatory operations for a command execution.
    *
    */
-  protected function load_the_data_parser() {
-    if ( ! class_exists('Symfony\Component\Yaml\Parser') || !$this->data_parser = new Parser() ) {
-      \WP_CLI::error( 'Symphony Yaml parser was not found! - Need to run composer install!' );
+  public function __invoke( $args, $assoc_args ) {
+
+    // Process the file path and validate it's existence.
+    $this->process_file_path( reset( $args ) );
+
+    // Get the data from the file.
+    $this->parse_data_from_file();
+
+    // Validate data type.
+    $this->validate_data_structure();
+
+    // Install.
+    $this->execute_command();
+  }
+
+  /**
+   * Validate that dependencies have been installed.
+   *
+   * If the dependencies have not been installed then, exits the script with an
+   * error message.
+   *
+   */
+  protected function validate_dependencies_installation() {
+
+    // validate the composer have installed the dependencies.
+    if ( ! file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+      \WP_CLI::error( 'Please, run composer install first' );
+    }
+
+  }
+
+  /**
+   * Load the dependencies.
+   *
+   * If the dependencies can't be loaded, then exits the script with an
+   * error message.
+   *
+   */
+  protected function load_dependencies() {
+    // Load the file data parser.
+    if ( ! class_exists('Symfony\Component\Yaml\Parser') || ! $this->data_parser = new Parser() ) {
+      \WP_CLI::error( 'Can\'t execute the command due to missing dependencies' );
     }
   }
 
   /**
-   * Get the data from a given file.
+   * Parse the data from a given file.
    *
    */
-  protected function get_data_from_file() {
+  protected function parse_data_from_file() {
     $this->data = $this->data_parser->parse( ( file_get_contents( $this->file_path ) ) );
-    $this->data_type = key($this->data);
   }
 
   /**
-   * Load and validate the data parser existence.
+   * Validate the data structure.
    *
-   * If the data parser isn't loaded then exits the script with an error message.
+   * if data type was structure is incorrect then, exits the script with an error message.
    *
    */
-  protected function validate_data_type() {
-    if ( ! in_array($this->data_type, $this->allowed_data_types ) ) {
-      $message = 'Data type: "@data_type" is incorrect the allowed types are: @allowed_types';
-      $variables = array( '@data_type' => $this->data_type, '@allowed_types' => implode( ', ', $this->allowed_data_types ) );
+
+  protected function validate_data_structure() {
+
+    // Validate the data type.
+    $data_type = key( $this->data );
+    if ( $data_type !== $this->data_type ) {
+
+      // Error message.
+      $message = 'Data type: "@data_type" is incorrect the allowed data type is: "@allowed_data_type"';
+
+      // Message placeholders.
+      $variables = array(
+        '@data_type' => $data_type,
+        '@allowed_data_type' => $this->data_type,
+      );
+
       \WP_CLI::error( strtr( $message, $variables ) );
     }
   }
 
   /**
-   * Process the file path from relative to absolute.
-   *
-   * Check if the given file exists. In case the file does not exists, Then
-   * exits the script with an error message. Else store the absolute file path.
+   * Process the file path from relative to absolute & validate it's integrity.
    *
    * @param $relative_file_path
    *  string
+   *
+   * Wrong file type or the file does not exists then,
+   * exits the script with an error message.
+   * File was found then, store the absolute file path.
+   *
    */
-  protected function process_file_path($relative_file_path) {
-    // Get the file path.
+  private function process_file_path( $relative_file_path ) {
+
+    // Get the absolute file path.
     $absolute_file_path = getcwd() . '/' . $relative_file_path;
+
+    // In case the file type is incorrect.
+    $file_extension = strtolower( pathinfo( $absolute_file_path, PATHINFO_EXTENSION ) );
+    if ( ! in_array( $file_extension , $this->allowed_file_types ) ) {
+
+      // Error message.
+      $message = 'File type: "@file_type" is incorrect. allowed file type are: "@allowed_file_types"';
+
+      // Message placeholders.
+      $variables = array(
+        '@file_type' => $file_extension,
+        '@allowed_file_types' => implode( ', ', $this->allowed_file_types ),
+      );
+
+      \WP_CLI::error( strtr( $message, $variables ) );
+    }
 
     // In case the file does not exists.
     if ( ! file_exists( $absolute_file_path ) ) {
-      $message = 'File: @file was not found!';
-      \WP_CLI::error( strtr( $message, array( '@file' => $absolute_file_path ) ) );
+      \WP_CLI::error( strtr( 'File: "@file" was not found!', array( '@file' => $absolute_file_path ) ) );
     }
 
     // Store the absolute path.
     $this->file_path = $absolute_file_path;
   }
-
-  /**
-   * Install a WordPress site from a profile.
-   *
-   * @param $args
-   * @param $assoc_args
-   *
-   * @when before_wp_load
-   *
-   */
-  public function __invoke( $args, $assoc_args ) {
-    // Process the file path and validate it's existence.
-    $this->process_file_path( reset( $args ) );
-
-    // Get the data from the file.
-    $this->get_data_from_file();
-
-    // Validate data type.
-    $this->validate_data_type();
-
-    \WP_CLI::success( print_r( $this->data ) );
-  }
 }
 
-\WP_CLI::add_command( 'profile-installer', __NAMESPACE__ . '\Installer' );
+// Database command.
+require_once('src/Database.php');
+\WP_CLI::add_command( 'profile-install db', __NAMESPACE__ . '\Database', array( 'when' => 'before_wp_load' ) );
+
+// Plugins command.
+require_once('src/Plugins.php');
+\WP_CLI::add_command( 'profile-install plugins', __NAMESPACE__ . '\Plugins', array( 'when' => 'before_wp_load' ) );
+
+// Themes command.
+require_once('src/Themes.php');
+\WP_CLI::add_command( 'profile-install themes', __NAMESPACE__ . '\Themes', array( 'when' => 'before_wp_load' ) );
+
+// Options command.
+require_once('src/Options.php');
+\WP_CLI::add_command( 'profile-install options', __NAMESPACE__ . '\Options', array( 'when' => 'before_wp_load' ) );
+
+// Core command.
+require_once('src/Core.php');
+\WP_CLI::add_command( 'profile-install core', __NAMESPACE__ . '\Core', array( 'when' => 'before_wp_load' ) );
+
+// Core command.
+require_once('src/Site.php');
+\WP_CLI::add_command( 'profile-install site', __NAMESPACE__ . '\Site', array( 'when' => 'before_wp_load' ) );

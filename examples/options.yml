@@ -1,0 +1,12 @@
+# Adding custom site options (https://codex.wordpress.org/Options_API).
+options:
+  key-1: value
+  key-2:
+   - value-1
+   - value-2
+   - value-3
+  key-3:
+   - sub-key:
+     - sub-value-1
+     - sub-value-2
+   - sub-key-2: value

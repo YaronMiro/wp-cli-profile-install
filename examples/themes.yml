@@ -1,4 +1,7 @@
 themes:
+  # The theme to set as active
+  active_theme: zerif-lite
+
   list:
     # Install a particular theme version.
     - name: twentyfourteen
@@ -19,6 +22,3 @@ themes:
    # Install a theme via a remote url.
     - name: my-remote-theme
       url: http://s3.amazonaws.com/bucketname/my-remote-theme.zip
-
-  # The theme to set as active
-  active_theme: zerif-lite

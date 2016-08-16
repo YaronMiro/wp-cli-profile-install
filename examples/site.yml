@@ -1,35 +1,27 @@
+# Site install.
 site:
-  # Site install version & locale setup.
-  core:
-    version:
-    locale:
+  title: 'My site ttitle'
+  url: 'My site ttitle'
 
-  # Site Admin user credentials.
+  # Admin user.
   admin_user:
     name: admin
     password: admin
     email: admin@example.com
 
-  # Site default language & install languages setup.
+  # Site languages.
   languages:
-    deafult_language:
+
+    deafult:
       name: English
-      code: EN
-    languages_list:
+      code: en_US
+
+    list:
       - name: Hebrew
-        code: IL
+        code: he_IL
 
-  # Modify the MySQL settings below so they will match your own.
-  database:
-    name: db_name
-    hostname: localhost
-    user:
-      name: root
-      password: root
-    prefix:
-    collate:
-    charset:
+      - name: Arabic
+        code: ar
 
-  # Adding custom site options.
-  options:
-    key: value
+      - name: 'French (France)'
+        code: fr_FR
