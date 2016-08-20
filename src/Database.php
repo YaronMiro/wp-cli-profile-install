@@ -18,7 +18,19 @@ class Database extends Installer {
   /**
    * @var array $data_structure the file data structure.
    */
-  protected $data_structure = array('ss');
+  protected $data_structure = array(
+    'database' => array(
+      'name' => 'S*',
+      'hostname' => 'S*',
+      'user' => array(
+        'name' => 'S*',
+        'password' => 'S*',
+      ),
+      'prefix' => 'S',
+      'collate' => 'S',
+      'charset' => 'S',
+    )
+  );
 
   /**
    * Install a WordPress site database from a config Yaml file.

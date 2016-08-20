@@ -114,7 +114,7 @@ abstract class Installer extends WP_CLI_Command {
    */
   protected function assert_data_structure() {
     if ( empty( $this->data_structure ) || ! is_array( $this->data_structure ) ) {
-      WP_CLI::error(  '"' . get_class($this) . '": ' . 'data_structure must be declared as a non empty array' );
+      WP_CLI::error(  '\'' . get_class( $this ) . '\': ' . 'data_structure must be declared as a non empty array' );
     }
   }
 
@@ -145,7 +145,7 @@ abstract class Installer extends WP_CLI_Command {
     if ( ! in_array( $file_extension , $this->allowed_file_types ) ) {
 
       // Error message.
-      $message = 'File type: "@file_type" is incorrect. allowed file type are: "@allowed_file_types"';
+      $message = 'File type: \'@file_type\' is incorrect. allowed file type are: \'@allowed_file_types\'';
 
       // Message placeholders.
       $variables = array(
@@ -158,7 +158,7 @@ abstract class Installer extends WP_CLI_Command {
 
     // In case the file does not exists.
     if ( ! file_exists( $absolute_file_path ) ) {
-      WP_CLI::error( strtr( 'File: "@file" was not found!', array( '@file' => $absolute_file_path ) ) );
+      WP_CLI::error( strtr( 'File: \'@file\' was not found!', array( '@file' => $absolute_file_path ) ) );
     }
 
     // Store the absolute path.

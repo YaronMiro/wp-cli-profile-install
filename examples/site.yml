@@ -1,7 +1,7 @@
 # Site install.
 site:
-  title: 'My site ttitle'
-  url: 'My site ttitle'
+  title: 'site title'
+  url: 'site url'
 
   # Admin user.
   admin_user:
