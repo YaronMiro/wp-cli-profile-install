@@ -1,6 +1,8 @@
 <?php
 
-namespace YM\Profile;
+namespace YaronMiro\WpProfile;
+
+use WP_CLI;
 
 /**
  * Command that installs the site themes.
@@ -15,9 +17,9 @@ namespace YM\Profile;
 class Themes extends Installer {
 
   /**
-   * @var string $data_type expected data type.
+   * @var array $data_structure the file data structure.
    */
-  protected $data_type = 'themes';
+  protected $data_structure = array();
 
   /**
    * Install a WordPress site themes from a config Yaml file.
@@ -37,11 +39,19 @@ class Themes extends Installer {
   }
 
   /**
+   * Validating the file data structure.
+   *
+   */
+  public function validate_data_structure() {
+    WP_CLI::line( print_r($this->data_structure) );
+  }
+
+  /**
    * Install process for the plugins.
    *
    */
   public function execute_command() {
-    \WP_CLI::success( 'Themes installed successfully' );
+    WP_CLI::success( 'Themes installed successfully' );
   }
 
 }

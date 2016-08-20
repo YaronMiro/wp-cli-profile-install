@@ -1,13 +1,15 @@
 <?php
 
-namespace YM\Profile;
+namespace YaronMiro\WpProfile;
+
+use WP_CLI;
 
 /**
  * Command that installs the site plugins.
  *
  * ## EXAMPLE
  *
- *     # Download Wordpress core
+ *     # Download WordPress core
  *     $ wp profile-install core example/core.yml
  *     Success: WordPress downloaded successfully.
  *
@@ -15,9 +17,9 @@ namespace YM\Profile;
 class Core extends Installer {
 
   /**
-   * @var string $data_type expected data type.
+   * @var array $data_structure the file data structure.
    */
-  protected $data_type = 'core';
+  protected $data_structure = array();
 
   /**
    * Downloads WordPress core from a config Yaml file.
@@ -37,11 +39,19 @@ class Core extends Installer {
   }
 
   /**
+   * Validating the file data structure.
+   *
+   */
+  public function validate_data_structure() {
+    WP_CLI::line( print_r($this->data_structure) );
+  }
+
+  /**
    * Download WordPress core.
    *
    */
   public function execute_command() {
-    \WP_CLI::success( 'WordPress downloaded successfully' );
+    WP_CLI::success( 'WordPress downloaded successfully' );
   }
 
 }

@@ -1,3 +1,0 @@
-# Load commands localy (When the command isn't add as a package).
-require:
-  - command.php

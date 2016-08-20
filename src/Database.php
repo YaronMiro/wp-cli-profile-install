@@ -1,6 +1,8 @@
 <?php
 
-namespace YM\Profile;
+namespace YaronMiro\WpProfile;
+
+use WP_CLI;
 
 /**
  * Command that installs the site database.
@@ -14,9 +16,9 @@ namespace YM\Profile;
 class Database extends Installer {
 
   /**
-   * @var string $data_type expected data type.
+   * @var array $data_structure the file data structure.
    */
-  protected $data_type = 'database';
+  protected $data_structure = array('ss');
 
   /**
    * Install a WordPress site database from a config Yaml file.
@@ -36,11 +38,19 @@ class Database extends Installer {
   }
 
   /**
+   * Validating the file data structure.
+   *
+   */
+  public function validate_data_structure() {
+      WP_CLI::line( print_r($this->data_structure) );
+  }
+
+  /**
    * Creating of the database.
    *
    */
   public function execute_command() {
-    \WP_CLI::success( 'Database created' );
+    WP_CLI::success( 'Database created' );
   }
 
 }

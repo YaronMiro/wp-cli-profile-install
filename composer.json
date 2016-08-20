@@ -1,7 +1,7 @@
 {
-  "name": "YaronMiro/wp-cli-profile-install",
+  "name": "YaronMiro/wp-profile",
   "description": "WP-CLI Command for installing a WordPress site from a profile via Yaml config files.",
-  "homepage": "https://github.com/YaronMiro/wp-cli-profile-install",
+  "homepage": "https://github.com/YaronMiro/wp-profile",
   "license": "MIT",
   "authors": [
     {
@@ -12,7 +12,12 @@
   ],
   "minimum-stability": "dev",
   "autoload": {
-    "files": [ "command.php" ]
+    "classmap": [
+      "command.php"
+    ],
+    "psr-4": {
+      "YaronMiro\\WpProfile\\": "src/"
+    }
   },
   "require": {
     "php": ">=5.3.9",

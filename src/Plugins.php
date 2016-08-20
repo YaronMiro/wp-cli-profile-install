@@ -1,6 +1,8 @@
 <?php
 
-namespace YM\Profile;
+namespace YaronMiro\WpProfile;
+
+use WP_CLI;
 
 /**
  * Command that installs the site plugins.
@@ -15,9 +17,9 @@ namespace YM\Profile;
 class Plugins extends Installer {
 
   /**
-   * @var string $data_type expected data type.
+   * @var array $data_structure the file data structure.
    */
-  protected $data_type = 'plugins';
+  protected $data_structure = array();
 
   /**
    * Install a WordPress site plugins from a config Yaml file.
@@ -37,11 +39,19 @@ class Plugins extends Installer {
   }
 
   /**
+   * Validating the file data structure.
+   *
+   */
+  public function validate_data_structure() {
+    WP_CLI::line( print_r($this->data_structure) );
+  }
+
+  /**
    * Install process for the plugins.
    *
    */
   public function execute_command() {
-    \WP_CLI::success( 'Plugins installed successfully' );
+    WP_CLI::success( 'Plugins installed successfully' );
   }
 
 }

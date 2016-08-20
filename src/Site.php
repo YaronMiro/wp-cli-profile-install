@@ -1,6 +1,8 @@
 <?php
 
-namespace YM\Profile;
+namespace YaronMiro\WpProfile;
+
+use WP_CLI;
 
 /**
  * Command that installs the WordPress site.
@@ -15,9 +17,9 @@ namespace YM\Profile;
 class Site extends Installer {
 
   /**
-   * @var string $data_type expected data type.
+   * @var array $data_structure the file data structure.
    */
-  protected $data_type = 'site';
+  protected $data_structure = array();
 
   /**
    * Install a WordPress site from a config Yaml file.
@@ -37,11 +39,19 @@ class Site extends Installer {
   }
 
   /**
+   * Validating the file data structure.
+   *
+   */
+  public function validate_data_structure() {
+    WP_CLI::line( print_r($this->data_structure) );
+  }
+
+  /**
    * Installing a WordPress site.
    *
    */
   public function execute_command() {
-    \WP_CLI::success( 'WordPress installed successfully' );
+    WP_CLI::success( 'WordPress installed successfully' );
   }
 
 }
