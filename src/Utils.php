@@ -17,7 +17,7 @@ use WP_CLI;
 
 
    /**
-    * Collect all keys from a given array even multidimensional array.
+    * Collect all keys from a any array including a multidimensional array.
     *
     * @param array $array
     *   The target array.

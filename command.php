@@ -54,14 +54,6 @@ abstract class Installer extends WP_CLI_Command {
   private $data_parser = null;
 
   /**
-   * Validate the data structure.
-   *
-   * Each sub-command file data structure is unique. Therefore it is an abstract
-   * method that must be implemented when a sub-command extends this class.
-   */
-  public abstract function validate_data_structure();
-
-  /**
    * Install a profile component via a unique command.
    *
    * Each sub-command process is unique. Therefore it is an abstract method
@@ -120,7 +112,10 @@ abstract class Installer extends WP_CLI_Command {
   protected function assert_data_structure() {
 
     // Mandatory keys.
-    $keys = array('allowed_properties');
+    $keys = array(
+      'allowed_properties',
+      'required_properties',
+    );
 
     $variables = array('@class' => get_class( $this ));
     foreach ( $keys as $key ) {
@@ -141,12 +136,70 @@ abstract class Installer extends WP_CLI_Command {
   protected function validate_data_allowed_properties() {
 
     // Compare arrays properties.
-    if ( $unknown_properties = array_diff( Utils::get_array_keys( $this->data ), $this->data_structure['allowed_properties'] ) ) {
+    if ( $unauthorised_properties = array_diff( Utils::get_array_keys( $this->data ), $this->data_structure['allowed_properties'] ) ) {
       $variables = array(
         '@file' => $this->file_path,
-        '@unknown_properties' => implode( ', ', $unknown_properties ),
+        '@unauthorised_properties' => implode( ', ', $unauthorised_properties ),
+        '@prop' => count( $unauthorised_properties ) > 1 ? 'properties' : 'property',
       );
-      WP_CLI::error( strtr( 'The file: \'@file\' contains unknown properties: @unknown_properties.' , $variables ) );
+      WP_CLI::error( strtr( 'Unauthorised @prop: \'@unauthorised_properties\' on file: \'@file\'.' , $variables ) );
+    }
+  }
+
+  /**
+   * Validating the file data structure.
+   *
+   */
+  protected function validate_data_structure() {
+
+    // Validate that the data does not contain any unknown properties.
+    $this->validate_data_allowed_properties();
+    $this->validate_data_required_properties($this->data_structure['required_properties'], $this->data);
+  }
+
+  /**
+   * Validate that the required properties are declared as expected.
+   *
+   * @param array $required_data
+   *  An array that defines the required properties.
+   * @param $data
+   *   The target data to validate against.
+   * @param null $main_property
+   *  The data may have some property that have sub-properties. For example:
+   *  The main property is 'user' and it has sub-properties: 'name' & `password`
+   * + ------------- +
+   * +  user:        +
+   * +    name:      +
+   * +    password:  +
+   * + ------------- +
+   */
+  protected function validate_data_required_properties($required_data, $data, $main_property = null) {
+
+    // Iterate over the data properties and validate that the properties were
+    // declared as expected.
+    $error_message = 'Property: \'@property\' is required on file: \'@file\'.';
+    foreach ($required_data as $key => $value) {
+
+      $variables = array( '@file' => $this->file_path );
+      // In case it's a simple key value per property.
+      if ( ! is_array( $value ) && empty( $data[$value] ) ) {
+        $variables['@property'] = $main_property ?  ( $main_property . ': ' . $value ) : $value;
+        WP_CLI::error( strtr( $error_message, $variables ) );
+      }
+
+      // In case it's an array (property with sub-properties).
+      if ( is_array( $value ) ) {
+
+        // In case the main property is missing.
+        if ( empty( $data[$key] ) ) {
+          $variables['@property'] = array( '@property' => $key );
+          WP_CLI::error( strtr( $error_message,  $variables) );
+        }
+
+        // Validate the sub properties.
+        $this->validate_data_required_properties($required_data[$key], $data[$key], $key);
+      }
+
     }
   }
 
@@ -176,15 +229,14 @@ abstract class Installer extends WP_CLI_Command {
     $file_extension = strtolower( pathinfo( $absolute_file_path, PATHINFO_EXTENSION ) );
     if ( ! in_array( $file_extension , $this->allowed_file_types ) ) {
 
-      // Error message.
-      $message = 'File type: \'@file_type\' is incorrect. allowed file type are: \'@allowed_file_types\'';
-
       // Message placeholders.
       $variables = array(
         '@file_type' => $file_extension,
         '@allowed_file_types' => implode( ', ', $this->allowed_file_types ),
       );
 
+      // Error message.
+      $message = 'File type: \'@file_type\' is incorrect. allowed file type are: \'@allowed_file_types\'';
       WP_CLI::error( strtr( $message, $variables ) );
     }
 

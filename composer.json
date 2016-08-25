@@ -21,8 +21,7 @@
   },
   "require": {
     "php": ">=5.3.9",
-    "symfony/yaml": "2.8.9",
-    "ptrofimov/matchmaker": "~1.0"
+    "symfony/yaml": "2.8.9"
   },
   "require-dev": {
     "behat/behat": "~2.5"

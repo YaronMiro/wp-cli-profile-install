@@ -20,14 +20,14 @@ class Database extends Installer {
    */
   protected $data_structure = array(
     'allowed_properties' => array (
-    'name',
-    'hostname',
-    'user',
-    'name',
-    'password',
-    'prefix',
-    'collate',
-    'charset',
+      'name',
+      'hostname',
+      'user',
+      'name',
+      'password',
+      'prefix',
+      'collate',
+      'charset',
     ),
     'required_properties' => array(
       'name',
@@ -57,65 +57,12 @@ class Database extends Installer {
   }
 
   /**
-   * Validating the file data structure.
-   *
-   */
-  public function validate_data_structure() {
-
-      // Validate that the data does not contain any unknown properties.
-      $this->validate_data_allowed_properties();
-
-      $this->validate_data_required_properties($this->data_structure['required_properties'], $this->data);
-
-
-
-
-
-
-
-//      WP_CLI::line( print_r( $this->data ) );
-//      WP_CLI::line( print_r( Utils::get_array_keys( $this->data ) ) );
-  }
-
-
-
-  /**
-   * Creating of the database.
-   *
-   */
-  public function validate_data_required_properties($required_data, $data) {
-
-
-
-    // Iterate over the data properties and validate that properties are have
-    // been declared as expected.
-    $current_key = null;
-    foreach ($required_data as $key => $value) {
-
-      // In case it's a missing key value per property.
-      if ( ! is_array( $value ) && empty( $data[$value] ) ) {
-        $variables = array(
-          '@property' => $current_key ?  ( $current_key . ': ' . $value ) : $value,
-        );
-        WP_CLI::error( strtr( 'Property: \'@property\' is required', $variables ) );
-      }
-
-      // In case it's an array.
-      if ( is_array( $value ) ) {
-        $current_key = $key;
-        $this->validate_data_required_properties($required_data[$key], $data[$key]);
-        return $current_key;
-      }
-
-    }
-  }
-
-  /**
    * Creating of the database.
    *
    */
   public function execute_command() {
     WP_CLI::success( 'Database created' );
+    WP_CLI::line( print_r( $this->data ) );
   }
 
 }
