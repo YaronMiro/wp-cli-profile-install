@@ -19,7 +19,10 @@ class Site extends Installer {
   /**
    * @var array $data_structure the file data structure.
    */
-  protected $data_structure = array();
+  protected $data_structure = array(
+    'required' => array(),
+    'not_required' => array(),
+  );
 
   /**
    * Install a WordPress site from a config Yaml file.

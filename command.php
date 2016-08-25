@@ -31,7 +31,7 @@ abstract class Installer extends WP_CLI_Command {
   /**
    * @var string $file_path the config file path.
    */
-  private $file_path = '';
+  protected  $file_path = '';
 
   /**
    * @var array $allowed_file_types config file types.
@@ -110,11 +110,43 @@ abstract class Installer extends WP_CLI_Command {
   }
 
   /**
-   * Assert that the `data_structure` property was declared as a non empty array.
+   * Assert that the `data_structure` property was declared as expected.
+   *
+   * e.g array (
+   *      'required => array(),
+   *      'not_required => array(),
+   *     );
    */
   protected function assert_data_structure() {
-    if ( empty( $this->data_structure ) || ! is_array( $this->data_structure ) ) {
-      WP_CLI::error(  '\'' . get_class( $this ) . '\': ' . 'data_structure must be declared as a non empty array' );
+
+    // Mandatory keys.
+    $keys = array('allowed_properties');
+
+    $variables = array('@class' => get_class( $this ));
+    foreach ( $keys as $key ) {
+      if ( ! isset( $this->data_structure[$key] ) ) {
+        $variables['@key'] = $key;
+        WP_CLI::error(  strtr('\'@class:\' data_structure array is missing a key definition: \'@key\'', $variables) );
+      }
+    }
+  }
+
+  /**
+   * Validate that the data does not contain any unknown properties.
+   *
+   * Compare the file data properties against the 'allowed data properties'.
+   * In case the arrays do not match then exits the script with an
+   * error message.
+   */
+  protected function validate_data_allowed_properties() {
+
+    // Compare arrays properties.
+    if ( $unknown_properties = array_diff( Utils::get_array_keys( $this->data ), $this->data_structure['allowed_properties'] ) ) {
+      $variables = array(
+        '@file' => $this->file_path,
+        '@unknown_properties' => implode( ', ', $unknown_properties ),
+      );
+      WP_CLI::error( strtr( 'The file: \'@file\' contains unknown properties: @unknown_properties.' , $variables ) );
     }
   }
 
@@ -173,7 +205,7 @@ WP_CLI::add_command( 'profile-install info', __NAMESPACE__ . '\\Info', array( 'w
 WP_CLI::add_command( 'profile-install db', __NAMESPACE__ . '\\Database', array( 'when' => 'before_wp_load' ) );
 
 // Plugins command.
-WP_CLI::add_command( 'profile-install plugins', __NAMESPACE__ . '\\Plugins' );
+WP_CLI::add_command( 'profile-install plugins', __NAMESPACE__ . '\\Plugins', array( 'when' => 'before_wp_load' ) );
 
 // Themes command.
 WP_CLI::add_command( 'profile-install themes', __NAMESPACE__ . '\\Themes' );

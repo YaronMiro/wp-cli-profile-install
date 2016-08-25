@@ -18,7 +18,10 @@ class Options extends Installer {
   /**
    * @var array $data_structure the file data structure.
    */
-  protected $data_structure = array();
+  protected $data_structure = array(
+    'required' => array(),
+    'not_required' => array(),
+  );
 
   /**
    * Creates custom site options from a config Yaml file.

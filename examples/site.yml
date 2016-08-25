@@ -1,27 +1,26 @@
 # Site install.
-site:
-  title: 'site title'
-  url: 'site url'
+title: 'site title'
+url: 'site url'
 
-  # Admin user.
-  admin_user:
-    name: admin
-    password: admin
-    email: admin@example.com
+# Admin user.
+admin_user:
+  name: admin
+  password: admin
+  email: admin@example.com
 
-  # Site languages.
-  languages:
+# Site languages.
+languages:
 
-    deafult:
-      name: English
-      code: en_US
+  deafult:
+    name: English
+    code: en_US
 
-    list:
-      - name: Hebrew
-        code: he_IL
+  list:
+    - name: Hebrew
+      code: he_IL
 
-      - name: Arabic
-        code: ar
+    - name: Arabic
+      code: ar
 
-      - name: 'French (France)'
-        code: fr_FR
+    - name: 'French (France)'
+      code: fr_FR
