@@ -186,8 +186,11 @@ abstract class Installer extends WP_CLI_Command {
         $variables['@property'] = $main_property ?  ( $main_property . ': ' . $value ) : $value;
         WP_CLI::error( strtr( $error_message, $variables ) );
       }
-
       // In case it's an array (property with sub-properties).
+      /**
+       * Check if numeric array or associative array
+       *
+       */
       if ( is_array( $value ) ) {
 
         // In case the main property is missing.

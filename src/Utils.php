@@ -29,6 +29,12 @@ use WP_CLI;
      $keys = array();
 
      foreach ($array as $key => $value) {
+
+       // In case it's a numeric key then we can skip it.
+       if ( is_int( $key ) ) {
+         continue;
+       }
+
        $keys[] = $key;
 
        // Use recursive in case the array is multidimensional.
@@ -39,4 +45,5 @@ use WP_CLI;
 
      return $keys;
    }
+
 }

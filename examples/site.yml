@@ -4,23 +4,22 @@ url: 'site url'
 
 # Admin user.
 admin_user:
-  name: admin
+  name:
   password: admin
   email: admin@example.com
 
 # Site languages.
+default-language:
+  name: English
+  code: en_US
+
+# All site languages.
 languages:
+  - name: Hebrew
+    code: he_IL
 
-  deafult:
-    name: English
-    code: en_US
+  - name: Arabic
+    code: ar
 
-  list:
-    - name: Hebrew
-      code: he_IL
-
-    - name: Arabic
-      code: ar
-
-    - name: 'French (France)'
-      code: fr_FR
+  - name: 'French (France)'
+    code: fr_FR

@@ -19,9 +19,27 @@ class Site extends Installer {
   /**
    * @var array $data_structure the file data structure.
    */
-  protected $data_structure = array (
-    'allowed_properties' => array(),
-    'required_properties' => array(),
+  protected $data_structure = array(
+    'allowed_properties' => array (
+      'title',
+      'url',
+      'admin_user',
+      'name',
+      'password',
+      'email',
+      'default-language',
+      'code',
+      'languages',
+    ),
+    'required_properties' => array(
+      'title',
+      'url',
+      'admin_user' => array(
+        'name',
+        'password',
+        'email',
+      ),
+    ),
   );
 
   /**
