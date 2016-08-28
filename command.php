@@ -195,7 +195,7 @@ abstract class Installer extends WP_CLI_Command {
 
         // In case the main property is missing.
         if ( empty( $data[$key] ) ) {
-          $variables['@property'] = array( '@property' => $key );
+          $variables['@property'] = $key;
           WP_CLI::error( strtr( $error_message,  $variables) );
         }
 
