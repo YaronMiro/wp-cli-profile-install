@@ -61,8 +61,32 @@ class Database extends Installer {
    *
    */
   public function execute_command() {
-    WP_CLI::success( 'Database created' );
-    WP_CLI::line( print_r( $this->data ) );
+
+
+    $this->create_database();
+
+  }
+
+  private function create_database() {
+
+    // Create connection
+    $conn = new \mysqli( $this->data['hostname'], $this->data['user']['name'], $this->data['user']['password'] );
+
+    if ($conn->connect_error) {
+      WP_CLI::error( 'Connection failed' );
+    }
+
+    if ( $conn->select_db($this->data['name'] ) ) {
+          WP_CLI::line( 'db exists' );
+    }
+    else {
+      WP_CLI::line( 'creating new db' );
+    }
+
+
+
+//    WP_CLI::success( 'Database created' );
+//    WP_CLI::line( print_r( $this->data ) );
   }
 
 }
