@@ -61,10 +61,7 @@ class Database extends Installer {
    *
    */
   public function execute_command() {
-
-
     $this->create_database();
-
   }
 
   private function create_database() {
