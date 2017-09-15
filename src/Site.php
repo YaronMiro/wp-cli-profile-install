@@ -19,7 +19,28 @@ class Site extends Installer {
   /**
    * @var array $data_structure the file data structure.
    */
-  protected $data_structure = array();
+  protected $data_structure = array(
+    'allowed_properties' => array (
+      'title',
+      'url',
+      'admin_user',
+      'name',
+      'password',
+      'email',
+      'default-language',
+      'code',
+      'languages',
+    ),
+    'required_properties' => array(
+      'title',
+      'url',
+      'admin_user' => array(
+        'name',
+        'password',
+        'email',
+      ),
+    ),
+  );
 
   /**
    * Install a WordPress site from a config Yaml file.
@@ -36,14 +57,6 @@ class Site extends Installer {
    */
   public function __invoke( $args, $assoc_args ) {
     parent::__invoke( $args, $assoc_args );
-  }
-
-  /**
-   * Validating the file data structure.
-   *
-   */
-  public function validate_data_structure() {
-    WP_CLI::line( print_r($this->data_structure) );
   }
 
   /**

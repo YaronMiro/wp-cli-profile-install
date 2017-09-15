@@ -1,4 +1,4 @@
-plugins:
+list:
   # Install a particular plugin version.
   - name: bbpress
     version: 1.2

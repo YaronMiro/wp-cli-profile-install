@@ -18,7 +18,10 @@ class Options extends Installer {
   /**
    * @var array $data_structure the file data structure.
    */
-  protected $data_structure = array();
+  protected $data_structure = array (
+    'allowed_properties' => array(),
+    'required_properties' => array(),
+  );
 
   /**
    * Creates custom site options from a config Yaml file.
@@ -35,14 +38,6 @@ class Options extends Installer {
    */
   public function __invoke( $args, $assoc_args ) {
     parent::__invoke( $args, $assoc_args );
-  }
-
-  /**
-   * Validating the file data structure.
-   *
-   */
-  public function validate_data_structure() {
-    WP_CLI::line( print_r($this->data_structure) );
   }
 
   /**

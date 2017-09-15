@@ -45,8 +45,8 @@ class Info extends WP_CLI_Command {
     WP_CLI::line();
     WP_CLI::line();
     WP_CLI::line( '  | Wp Profile General Information' );
-    WP_CLI::line( ' ----------------------------------------------------_' );
-    WP_CLI::line( '  | Version: ' . self::YM_WP_PROFILE_INSTALL_VERSION  );
+    WP_CLI::line( ' -----------------------------------------------------' );
+    WP_CLI::line( '  | Version: ' . self::YM_WP_PROFILE_INSTALL_VERSION );
     WP_CLI::line( ' -----------------------------------------------------' );
     WP_CLI::line( '  | Created by: Yaron Miro' );
     WP_CLI::line( ' -----------------------------------------------------' );

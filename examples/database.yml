@@ -1,10 +1,13 @@
 # Database settings.
-database:
-  name: db_name
-  hostname: localhost
-  user:
-    name: root
-    password: root
-  prefix:
-  collate:
-  charset:
+name: db_name
+hostname: localhost
+
+# Database user credentials.
+user:
+  name: root
+  password: root
+
+# Database extra configuration.
+prefix:
+collate:
+charset:
